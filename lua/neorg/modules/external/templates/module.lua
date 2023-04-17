@@ -42,6 +42,7 @@ local uv = vim.loop
 local log = require("neorg.external.log")
 local utils = require(plug("utils", "neorg.modules.external"))
 local snippet_handler = require(plug("snippet_handler", "neorg.modules.external"))
+local default_snippets = require(plug("default_snippets", "neorg.modules.external"))
 
 module.setup = function()
     return {
@@ -59,6 +60,14 @@ module.config.public = {
     templates_dir = vim.fn.stdpath("config") .. "/templates/norg",
     default_subcommand = "add",
     keywords = {},
+    snippets_overwrite = {
+        date_format = [[%Y-%m-%d]],
+        time_format = [[%H:%M]],
+        url_lookup = {
+            ["www.youtube.com"] = "YouTube",
+            ["youtu.be"] = "YouTube",
+        },
+    },
 }
 
 module.private = {
@@ -161,7 +170,9 @@ module.load = function()
         module.config.public.default_subcommand = "add"
     end
 
-    -- Append keywords
+    -- Add user defined snippets and append keywords
+    default_snippets = vim.tbl_deep_extend("force", default_snippets, module.config.public.snippets_overwrite)
+    snippet_handler.add_keywords(default_snippets.default_keywords)
     snippet_handler.add_keywords(module.config.public.keywords or {})
 end
 
