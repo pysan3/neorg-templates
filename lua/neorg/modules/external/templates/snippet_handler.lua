@@ -28,12 +28,22 @@ M.add_keywords = function(kwds)
 end
 
 M.search_keywords = function(content)
-    local kwds_ids = { TITLE = 1 }
+    local kwds_tuple, kwds_ids = {}, {}
+    local content_len = string.len(content)
     for key, _ in pairs(M.keywords) do
         if not kwds_ids[key] then
-            local splits = vim.split(content, key, { plain = true, trimempty = false })
-            kwds_ids[key] = #splits > 1 and string.len(splits[1]) or nil
+            local splits = vim.split(content, "{" .. key .. "}", { plain = true, trimempty = false })
+            local priority = #splits > 1 and string.len(splits[1])
+            kwds_tuple[#kwds_tuple + 1] = { key, priority or content_len }
+            kwds_ids[key] = priority
         end
+    end
+    table.sort(kwds_tuple, function(a, b)
+        return a[2] < b[2]
+    end)
+    for idx, tuple in ipairs(kwds_tuple) do
+        local key = tuple[1]
+        kwds_ids[key] = idx
     end
     return kwds_ids
 end
@@ -41,9 +51,6 @@ end
 M.build_keywords = function(kwds_ids)
     local res = { CURSOR = i(0) }
     for key, id in pairs(kwds_ids) do
-        -- res[key] = d(id, function(args, parent, old_stage, user_args)
-        --     return sn(1, M.keywords[key])
-        -- end)
         res[key] = sn(id, { M.keywords[key] })
     end
     return res
@@ -83,7 +90,6 @@ end
 
 M.load_template_at_curpos = function(content, fs_name)
     local snip = M.add_snippet_to_luasnip(content, fs_name, {})
-    vim.cmd.startinsert()
     vim.schedule(function()
         ls.snip_expand(snip, {})
     end)
