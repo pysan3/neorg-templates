@@ -76,10 +76,11 @@ end
 
 M.default_keywords = {
     TITLE = f(M.file_title),
+    TITLE_INPUT = i(1, M.file_title()),
     TODAY = f(M.current_date_f(0)),
     TOMORROW = f(M.current_date_f(1)),
     YESTERDAY = f(M.current_date_f(-1)),
-    WEATHER = c(1, { t("Sunny  ", t("Cloudy  "), t("Rainy  ")) }),
+    WEATHER = c(1, { t("Sunny "), t("Cloudy "), t("Rainy ") }),
     AUTHOR = f(require("neorg.external.helpers").get_username),
     URL_TAG = fmt([[#{url_type} {{{url}}}]], {
         url = i(1, "url"),
