@@ -76,7 +76,9 @@ end
 
 M.default_keywords = {
     TITLE = f(M.file_title),
-    TITLE_INPUT = i(1, M.file_title()),
+    TITLE_INPUT = d(1, function()
+        return sn(1, { i(1, M.file_title()) })
+    end),
     TODAY = f(M.current_date_f(0)),
     TOMORROW = f(M.current_date_f(1)),
     YESTERDAY = f(M.current_date_f(-1)),
