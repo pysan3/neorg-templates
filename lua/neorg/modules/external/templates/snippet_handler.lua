@@ -6,6 +6,7 @@ local sn = ls.snippet_node
 local i = ls.insert_node
 local d = ls.dynamic_node
 local fmt = require("luasnip.extras.fmt").fmt
+local types = require("luasnip.util.types")
 local e = function(trig, name, dscr, wordTrig, regTrig, docstring, docTrig, hidden, priority)
   local ret = { trig = trig, name = name, dscr = dscr }
   if wordTrig ~= nil then ret["wordTrig"] = wordTrig end
@@ -51,7 +52,7 @@ end
 M.build_keywords = function(kwds_ids)
     local res = { CURSOR = i(0) }
     for key, id in pairs(kwds_ids) do
-        res[key] = sn(id, { M.keywords[key] })
+        res[key] = sn(id, { vim.deepcopy(M.keywords[key]) })
     end
     return res
 end
