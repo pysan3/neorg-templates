@@ -134,7 +134,7 @@ module.private.define_commands = function()
                 cmds.templates.subcommands[command_name] = { args = 1, subcommands = {}, name = plug(command_name) }
             end
             cmds.templates.subcommands[command_name].subcommands[fs_name] =
-                { args = 0, name = plug({ "load", fs_name }) }
+                { args = 0, name = plug({ command_name, fs_name }) }
             subscribed_neorgcmd[plug({ command_name, fs_name })] = true
         end
     end
