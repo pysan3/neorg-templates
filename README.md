@@ -34,12 +34,12 @@ updated: {TODAY}
 version: 1.0.0
 \@end
 
-* {TITLE}
-Weather: {WEATHER}
-{{:{YESTERDAY}:}}[Yesterday] - {{:{TOMORROW}:}}[Tomorrow]
+* {TITLE_INPUT}
+  Weather: {WEATHER}
+  {{:{YESTERDAY}:}}[Yesterday] - {{:{TOMORROW}:}}[Tomorrow]
 
 ** Daily Review
-- {CURSOR}
+   - {CURSOR}
 ```
 
 When you load this plugin, you have the command: `:Neorg templates load journal`.
