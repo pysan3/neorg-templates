@@ -79,6 +79,7 @@ M.default_keywords = {
     TODAY = f(M.current_date_f(0)),
     TOMORROW = f(M.current_date_f(1)),
     YESTERDAY = f(M.current_date_f(-1)),
+    WEATHER = c(1, { t("Sunny  ", t("Cloudy  "), t("Rainy  ")) }),
     AUTHOR = f(require("neorg.external.helpers").get_username),
     URL_TAG = fmt([[#{url_type} {{{url}}}]], {
         url = i(1, "url"),

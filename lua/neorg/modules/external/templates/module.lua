@@ -110,6 +110,16 @@ module.private.subcommands.fload = function(fs_name)
     return module.private.subcommands.add(fs_name)
 end
 
+---Load. Similar to `fload` but asks for confirmation before deleting buffer content
+module.private.subcommands.load = function(fs_name)
+    local help = "(use `:Neorg templates add xxx` to append template file)"
+    local msg = "Current buffer has contents. Delete? " .. help
+    if utils.buffer_has_contents(0) and not utils.confirm(msg) then
+        return
+    end
+    return module.private.subcommands.fload(fs_name)
+end
+
 ---Looks at `module.private.commands` and files inside `module.config.public.templates_dir` to create the subcommands
 ---This dynamically creates the completion options after `:Neorg templates <subcommand> <fs_name>`
 module.private.define_commands = function()
@@ -130,16 +140,6 @@ module.private.define_commands = function()
     end
     module.required["core.neorgcmd"].add_commands_from_table(cmds)
     module.events.subscribed = { ["core.neorgcmd"] = subscribed_neorgcmd }
-end
-
----Load. Similar to `fload` but asks for confirmation before deleting buffer content
-module.private.subcommands.load = function(fs_name)
-    local help = "(use `:Neorg templates add xxx` to append template file)"
-    local msg = "Current buffer has contents. Delete? " .. help
-    if utils.buffer_has_contents(0) and not utils.confirm(msg) then
-        return
-    end
-    return module.private.subcommands.fload(fs_name)
 end
 
 ---First function to be loaded
