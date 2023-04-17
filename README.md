@@ -25,7 +25,7 @@ So, the plugin works like this. First you create a template file like this.
 <sub>`\@end` is escaped cuz it ends the code block...</sub>
 ```norg
 @document.meta
-title: {TITLE}
+title: {TITLE_INPUT}
 description:
 authors: {AUTHOR}
 categories:
@@ -50,7 +50,7 @@ This behavior can be customized. More in [Subcommands](#subcommands).
 
 ### Autofill with `LuaSnip`
 
-But do you see the `{TITLE}` placeholder in the template file?
+But do you see the `{AUTHOR}` placeholder in the template file?
 
 Yes, it automatically substitutes those placeholders **with the power of `LuaSnip`**!
 
@@ -64,10 +64,14 @@ Also, I've added some useful snippets by default so you can use them out of the 
 TODO: GIF of me loading template file with Neorg.
 
 1. `:Neorg templates fload journal` (`force load`: Overwrite buffer without asking)
-2. `TITLE, AUTHOR, TODAY...` will be automatically filled.
-3. Cursor at `{WEATHER}`.
+2. `AUTHOR, TODAY...` will be automatically filled.
+3. `{TITLE_INPUT}` is an `input_node` with `{TITLE}` being the default placeholder text.
+    - Changes the title.
+4. Cursor at `{WEATHER}`.
     - Choosing between options provided from `LuaSnip`'s `choice_node`.
-4. Cursor ends up at `{CURSOR}` position.
+5. Cursor ends up at `{CURSOR}` position.
+
+\* `{CURSOR}` is a magic keyword, which specifies the last position of the cursor.
 
 
 ## Installation
@@ -76,11 +80,11 @@ TODO: GIF of me loading template file with Neorg.
 ```lua
 -- neorg.lua
 local M = {
-  "nvim-neorg/neorg",
-  ft = "norg",
-  dependencies = {
-    { "pysan3/neorg-templates-draft", dependencies = { "L3MON4D3/LuaSnip" } }, -- ADD THIS LINE
-  },
+    "nvim-neorg/neorg",
+    ft = "norg",
+    dependencies = {
+        { "pysan3/neorg-templates-draft", dependencies = { "L3MON4D3/LuaSnip" } }, -- ADD THIS LINE
+    },
 }
 ```
 
@@ -90,13 +94,13 @@ local M = {
 ```lua
 -- See {*** Options} for more options
 M.config = function ()
-  require("neorg").setup({
-    load = {
-      ["external.templates"] = {
-        ...
-      }
-    }
-  })
+    require("neorg").setup({
+        load = {
+            ["external.templates"] = {
+                ...
+            }
+        }
+    })
 end
 ```
 
