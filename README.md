@@ -80,11 +80,11 @@ Also, I've added some useful snippets by default so you can use them out of the 
 ```lua
 -- neorg.lua
 local M = {
-    "nvim-neorg/neorg",
-    ft = "norg",
-    dependencies = {
-        { "pysan3/neorg-templates-draft", dependencies = { "L3MON4D3/LuaSnip" } }, -- ADD THIS LINE
-    },
+  "nvim-neorg/neorg",
+  ft = "norg",
+  dependencies = {
+    { "pysan3/neorg-templates-draft", dependencies = { "L3MON4D3/LuaSnip" } }, -- ADD THIS LINE
+  },
 }
 ```
 
@@ -94,13 +94,13 @@ local M = {
 ```lua
 -- See {*** Options} for more options
 M.config = function ()
-    require("neorg").setup({
-        load = {
-            ["external.templates"] = {
-                ...
-            }
-        }
-    })
+  require("neorg").setup({
+    load = {
+      ["external.templates"] = {
+        ...
+      }
+    }
+  })
 end
 ```
 
@@ -110,16 +110,18 @@ end
 Find details here: [`module.config.public`](#luaneorgmodulesexternaltemplatesmodulelua59)
 
 
-#### `templates_dir`: `str`
+#### `templates_dir`: `string | string[]`
 
-> Path to the directory where the template files are stored.
+> Path to the directories where the template files are stored.
 
 - Default: `vim.fn.stdpath("config") .. "/templates/norg"`
     - Most likely: `~/.config/nvim/templates/norg`
 - Only looks for 1 depth.
+- You may also provide multiple paths to directories with a table.
+    - `templates_dir = {"~/temp1/", "~/temp2/"}`
 
 
-#### `default_subcommand`: `str`
+#### `default_subcommand`: `string`
 
 > Default action to take when only filename is provided.
 >
@@ -156,7 +158,7 @@ All command in this plugin takes the format of `:Neorg templates <subcmd> <fs_na
     - If you want to load `<config.templates_dir>/journal.norg`, call with `journal`.
 
 
-#### `default_subcommand`: [`default_subcommand`: `str`](#defaultsubcommand-str)
+#### `default_subcommand`: [`default_subcommand`: `string`](#defaultsubcommand-string)
 
 If you ommit `<subcmd>` and call this plugin with `:Neorg templates <fs_name>`,
 the behavior depends on this config option.

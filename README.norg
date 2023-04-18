@@ -78,11 +78,11 @@ version: 1.0.0
    @code lua
    -- neorg.lua
    local M = {
-       "nvim-neorg/neorg",
-       ft = "norg",
-       dependencies = {
-           { "pysan3/neorg-templates-draft", dependencies = { "L3MON4D3/LuaSnip" } }, -- ADD THIS LINE
-       },
+     "nvim-neorg/neorg",
+     ft = "norg",
+     dependencies = {
+       { "pysan3/neorg-templates-draft", dependencies = { "L3MON4D3/LuaSnip" } }, -- ADD THIS LINE
+     },
    }
    @end
 
@@ -90,27 +90,29 @@ version: 1.0.0
    @code lua
    -- See {*** Options} for more options
    M.config = function ()
-       require("neorg").setup({
-           load = {
-               ["external.templates"] = {
-                   ...
-               }
-           }
-       })
+     require("neorg").setup({
+       load = {
+         ["external.templates"] = {
+           ...
+         }
+       }
+     })
    end
    @end
 
 *** Options
     Find details here: {/ ./lua/neorg/modules/external/templates/module.lua:59}[`module.config.public`]
 
-**** `templates_dir`: `str`
-     > Path to the directory where the template files are stored.
+**** `templates_dir`: `string | string[]`
+     > Path to the directories where the template files are stored.
 
      - Default: `vim.fn.stdpath("config") .. "/templates/norg"`
      -- Most likely: `~/.config/nvim/templates/norg`
      - Only looks for 1 depth.
+     - You may also provide multiple paths to directories with a table.
+     -- `templates_dir = {"~/temp1/", "~/temp2/"}`
 
-**** `default_subcommand`: `str`
+**** `default_subcommand`: `string`
      > Default action to take when only filename is provided.
        >
      > More details are explained in {** Subcommands}
@@ -139,7 +141,7 @@ version: 1.0.0
    - `<fs_name>`: Name of template file to load.
    -- If you want to load `<config.templates_dir>/journal.norg`, call with `journal`.
 
-**** `default_subcommand`: {**** `default_subcommand`: `str`}
+**** `default_subcommand`: {**** `default_subcommand`: `string`}
      If you ommit `<subcmd>` and call this plugin with `:Neorg templates <fs_name>`,
      the behavior depends on this config option.
 

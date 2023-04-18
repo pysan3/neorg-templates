@@ -40,9 +40,9 @@ end
 local module = neorg.modules.create(plug(nil, "external")) ---@diagnostic disable-line
 local uv = vim.loop
 local log = require("neorg.external.log")
-local utils = require(plug("utils", "neorg.modules.external"))
-local snippet_handler = require(plug("snippet_handler", "neorg.modules.external"))
-local default_snippets = require(plug("default_snippets", "neorg.modules.external"))
+local utils = require("neorg.modules.external.templates.utils")
+local snippet_handler = require("neorg.modules.external.templates.snippet_handler")
+local default_snippets = require("neorg.modules.external.templates.default_snippets")
 
 module.setup = function()
     return {
@@ -71,7 +71,6 @@ module.config.public = {
 }
 
 module.private = {
-    templates_dir_abs = "",
     template_files = {},
 }
 
@@ -81,15 +80,14 @@ module.private.subcommands = {}
 
 ---Add (append) template file content to the current cursor position
 module.private.subcommands.add = function(fs_name)
-    for name, path in pairs(module.private.template_files) do
+    for name, path_abs in pairs(module.private.template_files) do
         if fs_name == name then
-            local abs_path = module.private.templates_dir_abs .. "/" .. path
-            local st = uv.fs_stat(abs_path)
+            local st = uv.fs_stat(path_abs)
             local file_content = ""
             if not st then
-                vim.notify(string.format([[%s does not exist.]], abs_path))
+                vim.notify(string.format([[%s does not exist.]], path_abs))
             else
-                local file = io.open(abs_path, "r")
+                local file = io.open(path_abs, "r")
                 if file then -- `file` may be `nil` when failed
                     local content = file:read("*a") -- Read the whole file
                     if content then -- content may be `nil` when failed
@@ -114,7 +112,7 @@ end
 module.private.subcommands.load = function(fs_name)
     local help = "(use `:Neorg templates add xxx` to append template file)"
     local msg = "Current buffer has contents. Delete? " .. help
-    if utils.buffer_has_contents(0) and not utils.confirm(msg) then
+    if utils.buffer_has_contents(0) and not utils.confirm(msg, false) then
         return
     end
     return module.private.subcommands.fload(fs_name)
@@ -145,14 +143,30 @@ end
 ---First function to be loaded
 module.load = function()
     -- Find templates
-    module.private.templates_dir_abs = vim.fn.fnamemodify(module.config.public.templates_dir, ":p")
-    log.debug([[Loading templates from: ]] .. module.private.templates_dir_abs)
-    if not utils.fs_exists(module.private.templates_dir_abs) then
-        log.warn([[templates_dir does not exist: ]] .. module.private.templates_dir_abs)
+    if type(module.config.public.templates_dir) ~= "table" then
+        module.config.public.templates_dir = { module.config.public.templates_dir }
     end
-    for _, path in ipairs(utils.list_template_files(module.private.templates_dir_abs)) do
-        local fs_name = utils.fs_name(path)
-        module.private.template_files[fs_name] = path
+    for _, dir in ipairs(module.config.public.templates_dir) do
+        local dir_abs = vim.fn.fnamemodify(dir, ":p")
+        log.debug([[Loading templates from: ]] .. dir_abs)
+        if not utils.fs_exists(dir_abs) then
+            log.warn([[templates_dir does not exist: ]] .. dir_abs)
+        else
+            for _, path in ipairs(utils.list_template_files(dir_abs)) do
+                local path_abs = dir_abs .. "/" .. path
+                local fs_name = utils.fs_name(path_abs)
+                if module.private.template_files[fs_name] ~= nil then
+                    log.warn(
+                        string.format(
+                            [[Found multiple template files with same name: %s, %s. Ignoring previous.]],
+                            module.private.template_files[fs_name],
+                            path_abs
+                        )
+                    )
+                end
+                module.private.template_files[fs_name] = path_abs
+            end
+        end
     end
     log.debug("Template files found: " .. vim.inspect(module.private.template_files))
     module.private.define_commands()
