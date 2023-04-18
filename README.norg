@@ -120,7 +120,7 @@ version: 1.0.0
 
      - Default: `add`: {** Subcommands} - {*** `add`}
 
-**** `keywords`: `{KEY: <snippet_node> | fun(...): <snippet_node>}`
+**** `keywords`: `{KEY: <snippet_node>}` | `{KEY: fun(...) -> <snippet_node>}`
      > Define snippets to be called in placeholders.
        >
      > Kyes are advised to be `ALL_CAPITALIZED`.

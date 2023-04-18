@@ -131,7 +131,7 @@ Find details here: [`module.config.public`](#luaneorgmodulesexternaltemplatesmod
 - Default: `add`: [Subcommands](#subcommands) - [`add`](#add)
 
 
-#### `keywords`: `{KEY: <snippet_node> | fun(...): <snippet_node>}`
+#### `keywords`: `{KEY: <snippet_node>}` | `{KEY: fun(...) -> <snippet_node>}`
 
 > Define snippets to be called in placeholders.
 >
