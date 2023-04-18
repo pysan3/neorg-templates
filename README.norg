@@ -61,7 +61,7 @@ version: 1.0.0
     Also, I've added some useful snippets by default so you can use them out of the box!
 
 *** Demo
-    !{https://user-images.githubusercontent.com/41065736/232785115-7e2ac26b-9daf-4c57-9677-e491f8a81f97.gif}[templates-demo]
+    !{https://user-images.githubusercontent.com/41065736/232847417-6f7e32b8-fdd3-4464-9d67-269bb28b363c.gif}[templates-demo]
 
     ~ `:Neorg templates fload journal` (`force load`: Overwrite buffer without asking)
     ~ `AUTHOR, TODAY...` will be automatically filled.
