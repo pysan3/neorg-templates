@@ -188,6 +188,7 @@ module.load = function()
     default_snippets = vim.tbl_deep_extend("force", default_snippets, module.config.public.snippets_overwrite)
     snippet_handler.add_keywords(default_snippets.default_keywords)
     snippet_handler.add_keywords(module.config.public.keywords or {})
+    snippet_handler.magic_keywords = default_snippets.magic_keywords
 end
 
 module.on_event = function(event)

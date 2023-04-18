@@ -39,6 +39,10 @@ local M = {
         ["www.youtube.com"] = "YouTube",
         ["youtu.be"] = "YouTube",
     },
+    magic_keywords = {
+        CURSOR = i(0),
+        METADATA = t("Error processing {METADATA}. This should be at the first line of template file."),
+    },
 }
 
 M.parse_date = function(delta_date, str)
@@ -76,9 +80,9 @@ end
 
 M.default_keywords = {
     TITLE = f(M.file_title),
-    TITLE_INPUT = d(1, function()
-        return sn(1, { i(1, M.file_title()) })
-    end),
+    TITLE_INPUT = function()
+        return i(1, M.file_title())
+    end,
     TODAY = f(M.current_date_f(0)),
     TOMORROW = f(M.current_date_f(1)),
     YESTERDAY = f(M.current_date_f(-1)),

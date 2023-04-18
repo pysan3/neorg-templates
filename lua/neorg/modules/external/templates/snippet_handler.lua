@@ -3,31 +3,28 @@
 local ls = require("luasnip")
 local s = ls.snippet
 local sn = ls.snippet_node
-local i = ls.insert_node
 local d = ls.dynamic_node
 local fmt = require("luasnip.extras.fmt").fmt
-local types = require("luasnip.util.types")
-local e = function(trig, name, dscr, wordTrig, regTrig, docstring, docTrig, hidden, priority)
-  local ret = { trig = trig, name = name, dscr = dscr }
-  if wordTrig ~= nil then ret["wordTrig"] = wordTrig end
-  if regTrig ~= nil then ret["regTrig"] = regTrig end
-  if docstring ~= nil then ret["docstring"] = docstring end
-  if docTrig ~= nil then ret["docTrig"] = docTrig end
-  if hidden ~= nil then ret["hidden"] = hidden end
-  if priority ~= nil then ret["priority"] = priority end
-  return ret
-end
+local rep = require("luasnip.extras").rep
 -- stylua: ignore end
 ---@diagnostic enable
 
 M = {
     keywords = {}, -- will be updated with M.add_keywords
+    magic_keywords = {},
 }
 
 ---append user defined aliases to snippets
 ---@param kwds table<string, any> # { TITLE = i(1) }
 M.add_keywords = function(kwds)
     M.keywords = vim.tbl_extend("force", M.keywords, kwds)
+end
+
+---from `CURSOR` to `{CURSOR}`
+---@param key string # name of key
+---@return string # "{<key>}"
+M.key2entry = function(key)
+    return "{" .. key .. "}"
 end
 
 ---search keywords inside `content` and index the order
@@ -38,7 +35,7 @@ M.search_keywords = function(content)
     local content_len = string.len(content)
     for key, _ in pairs(M.keywords) do
         if not kwds_ids[key] then
-            local splits = vim.split(content, "{" .. key .. "}", { plain = true, trimempty = false })
+            local splits = vim.split(content, M.key2entry(key), { plain = true, trimempty = false })
             local priority = #splits > 1 and string.len(splits[1])
             kwds_tuple[#kwds_tuple + 1] = { key, priority or content_len }
             kwds_ids[key] = priority
@@ -58,11 +55,37 @@ end
 ---@param kwds_ids table<string, integer> # result from M.search_keywords
 ---@return table<string, any> # keyword and snippet_node with appropriate index as value
 M.build_keywords = function(kwds_ids)
-    local res = { CURSOR = i(0) }
+    local res = vim.deepcopy(M.magic_keywords)
     for key, id in pairs(kwds_ids) do
-        res[key] = sn(id, { vim.deepcopy(M.keywords[key]) })
+        if type(M.keywords[key]) == "function" then
+            res[key] = sn(id, M.keywords[key](kwds_ids))
+        else -- M.keywords[key] is a snippet node. i.e. table
+            res[key] = sn(id, vim.deepcopy(M.keywords[key]))
+        end
     end
     return res
+end
+
+---rename duplicate entries of keywords to `rep`
+---@param content string # whole content of file
+---@param kwds_ids table<string, integer> # output of `M.search_keywords`
+---@param keywords table<string, any> # output of `M.build_keywords` (any = snippet_node)
+---@param snip_name string # unique string that identifies the snippet
+---@return string # new_content after renaming duplicates
+M.handle_duplicate_fields = function(content, kwds_ids, keywords, snip_name)
+    for key, id in pairs(kwds_ids) do
+        local counter = 0
+        content = string.gsub(content, M.key2entry(key), function(match)
+            counter = counter + 1
+            if counter == 1 then
+                return match
+            end
+            local new_key = string.format([[%s.repeat_node.%s]], key, counter) .. snip_name
+            keywords[new_key] = rep(id)
+            return M.key2entry(new_key)
+        end)
+    end
+    return content
 end
 
 ---accumulate content and snippets and create a `fmt` node
@@ -73,7 +96,8 @@ M.create_snippet = function(content, snip_name)
     local dscr = "Created by norg_snippet_handler: " .. snip_name
     local kwds_ids = M.search_keywords(content)
     local keywords = M.build_keywords(kwds_ids)
-    return s({ trig = snip_name, name = snip_name, dscr = dscr }, fmt(content, keywords, { strict = false }))
+    local new_content = M.handle_duplicate_fields(content, kwds_ids, keywords, snip_name)
+    return s({ trig = snip_name, name = snip_name, dscr = dscr }, fmt(new_content, keywords, { strict = false }))
 end
 
 ---create new snippet based on `content` and `fs_name` and register to luasnip
@@ -93,8 +117,7 @@ M.add_snippet_to_luasnip = function(content, fs_name, add_opts)
         vim.tbl_extend("keep", {
             type = type,
             key = snip_name,
-            -- prevent refresh here, will be done outside loop.
-            refresh_notify = false,
+            refresh_notify = true,
         }, add_opts or {})
     )
     -- get new snippet object
@@ -106,11 +129,31 @@ M.add_snippet_to_luasnip = function(content, fs_name, add_opts)
     end
 end
 
+---find `{METADATA}` keyword and substitute with output from `core.norg.esupports.metagen`
+---@param content string # whole content of file
+---@return string, string? # [new_content, metagen subcmd]: metagen subcmd will be nil if `{METADATA}` is not found
+M.extract_metadata = function(content)
+    if vim.startswith(content, "{METADATA}") then
+        return string.sub(content, string.len("{METADATA}") + 1), ""
+    elseif vim.startswith(content, "{METADATA:") then
+        for w in string.gmatch(content, [[:([%w%-_.]+)}]]) do
+            vim.print(w)
+            return string.sub(content, string.len("{METADATA:") + string.len(w) + 2), w
+        end
+    end
+    return content, nil
+end
+
 ---create and expand the snippet at current cursor position
 ---@param content string # whole content of file
 ---@param fs_name string # unique name of template file
 M.load_template_at_curpos = function(content, fs_name)
-    local snip = M.add_snippet_to_luasnip(content, fs_name, {})
+    local new_content, metagen_subcmd = M.extract_metadata(content)
+    local snip = M.add_snippet_to_luasnip(new_content, fs_name, {})
+    if metagen_subcmd then
+        vim.cmd([[Neorg inject-metadata ]] .. metagen_subcmd)
+    end
+    vim.cmd.startinsert()
     vim.schedule(function()
         ls.snip_expand(snip, {})
     end)
