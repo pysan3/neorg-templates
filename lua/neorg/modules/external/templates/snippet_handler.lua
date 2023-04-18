@@ -122,9 +122,9 @@ M.add_snippet_to_luasnip = function(content, fs_name, add_opts)
     )
     -- get new snippet object
     local snippet_list = ls.get_snippets(ft, type)
-    for _, snip in ipairs(snippet_list) do
-        if snip.name == snip_name then
-            return snip
+    for i = #snippet_list, 1, -1 do -- reverse list to find the latest
+        if snippet_list[i].name == snip_name then
+            return snippet_list[i]
         end
     end
 end
