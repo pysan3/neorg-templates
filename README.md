@@ -211,6 +211,24 @@ Magic keywords take the format of `{CURSOR}` same as a placeholder, but has a sp
 - In order to `:Neorg inject-metadata blog-post`, use `{METADATA:blog-post}`
 
 
+## Ask for a Snippet
+
+If you are not familiar with `LuaSnip` post what kind of snippet you want! Maybe someone can help you out.
+
+Post it in the [Discussions](https://github.com/pysan3/neorg-templates-draft/discussions)
+with the category `✂️ Ask for a Snippet `.
+
+
+## Useful Templates
+
+- [pysan3](https://github.com/pysan3)
+    - [Plugin Setup](https://github.com/pysan3/dotfiles/blob/main/nvim/lua/plugins/60-neorg.lua)
+    - [Personal Keywords](https://github.com/pysan3/dotfiles/blob/main/nvim/lua/norg-config/templates.lua)
+    - [Templates](https://github.com/pysan3/dotfiles/tree/main/nvim/templates/norg)
+
+More examples welcome! Create a PR to update the README.
+
+
 ## Contribution
 
 - Any PR is WELCOME!!

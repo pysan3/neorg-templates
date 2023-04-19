@@ -4,7 +4,7 @@ description:
 authors: takuto
 categories:
 created: 2023-04-16
-updated: 2023-04-18
+updated: 2023-04-19
 version: 1.0.0
 @end
 
@@ -181,6 +181,20 @@ version: 1.0.0
     -- Read {https://github.com/nvim-neorg/neorg/wiki/Metagen}[Neorg - Wiki - Metagen] instead.
     - This keyword *MUST BE* at the *first line* of the template file.
     - In order to `:Neorg inject-metadata blog-post`, use `{METADATA:blog-post}`
+
+** Ask for a Snippet
+   If you are not familiar with `LuaSnip` post what kind of snippet you want! Maybe someone can help you out.
+
+   Post it in the {https://github.com/pysan3/neorg-templates-draft/discussions}[Discussions]
+   with the category `✂️ Ask for a Snippet `.
+
+** Useful Templates
+   - {https://github.com/pysan3}[pysan3]
+   -- {https://github.com/pysan3/dotfiles/blob/main/nvim/lua/plugins/60-neorg.lua}[Plugin Setup]
+   -- {https://github.com/pysan3/dotfiles/blob/main/nvim/lua/norg-config/templates.lua}[Personal Keywords]
+   -- {https://github.com/pysan3/dotfiles/tree/main/nvim/templates/norg}[Templates]
+
+   More examples welcome! Create a PR to update the README.
 
 ** Contribution
    - Any PR is WELCOME!!
