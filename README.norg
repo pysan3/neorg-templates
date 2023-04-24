@@ -4,29 +4,24 @@ description:
 authors: takuto
 categories:
 created: 2023-04-16
-updated: 2023-04-19
+updated: 2023-04-24
 version: 1.0.0
 @end
 
-* Neorg Templates Draft
+* Neorg Templates
   #norg
   #neorg
   #templates
-  /A very early stage implementation of template files for norg files, to show a proof of concept./
-
   \* *This README is generated from {./README.norg}.*
 
 ** Ideas
    - Using {https://github.com/L3MON4D3/LuaSnip}[`LuaSnip`] to utilize the power of snippets
-   - -`ffmt` (file_format_nodes): enables snippet definitions in separate files.-
-   -- (_) This feature is still a PR: {https://github.com/L3MON4D3/LuaSnip/pull/868}[PR link] -> *Rejected*
-   -- (x) Implemented missing parts inside this plugin instead.
 
 *** Template norg files
     So, the plugin works like this. First you create a template file like this.
 
     `~/.config/nvim/templates/norg/journal.norg`
-    ,`\@end` is escaped cuz it ends the code block...,
+    ,`@end` is escaped because it ends the code block...,
     @code norg
     @document.meta
     title: {TITLE_INPUT}
@@ -82,7 +77,7 @@ version: 1.0.0
      "nvim-neorg/neorg",
      ft = "norg",
      dependencies = {
-       { "pysan3/neorg-templates-draft", dependencies = { "L3MON4D3/LuaSnip" } }, -- ADD THIS LINE
+       { "pysan3/neorg-templates", dependencies = { "L3MON4D3/LuaSnip" } }, -- ADD THIS LINE
      },
    }
    @end
