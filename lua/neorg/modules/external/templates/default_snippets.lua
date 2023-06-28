@@ -83,6 +83,9 @@ M.default_keywords = {
     TITLE_INPUT = function()
         return i(1, M.file_title())
     end,
+    INSERT = function()
+        return i(1)
+    end,
     TODAY = f(M.current_date_f(0)),
     TOMORROW = f(M.current_date_f(1)),
     YESTERDAY = f(M.current_date_f(-1)),
