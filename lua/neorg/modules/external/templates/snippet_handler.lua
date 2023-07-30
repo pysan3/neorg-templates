@@ -67,14 +67,11 @@ M.build_keywords = function(kwds_ids)
     kwds_ids._neorg_templates_max_idx = nil
     for key, _ in pairs(kwds_ids) do
         local node = M.keywords[key]
-        if not result[key] and not node then
-            kwds_ids[key] = max_idx
-            max_idx = max_idx + 1
-        end
         if result[key] then
             -- do not overwrite existing keys (magic keywords)
         elseif not node then
-            result[key] = sn(kwds_ids[key], t(M.key2entry(key)))
+            result[key] = sn(max_idx, t(M.key2entry(key)))
+            max_idx = max_idx + 1
         elseif type(node) == "function" then
             result[key] = sn(kwds_ids[key], node(kwds_ids))
         else -- `node` is a snippet node. i.e. table
