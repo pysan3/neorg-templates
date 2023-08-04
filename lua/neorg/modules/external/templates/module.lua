@@ -1,5 +1,6 @@
 local ext_name = "templates"
 local neorg = require("neorg.core")
+local log = neorg.log
 
 ---Concat table of strings
 ---@param s_tbl string | string[] # table of strings, if it is a simple string, treats as `{ s_tbl }`
@@ -36,7 +37,6 @@ end
 
 local module = neorg.modules.create(plug(nil, "external")) ---@diagnostic disable-line
 local uv = vim.loop
-local log = require("neorg.external.log")
 local utils = require("neorg.modules.external.templates.utils")
 local snippet_handler = require("neorg.modules.external.templates.snippet_handler")
 local default_snippets = require("neorg.modules.external.templates.default_snippets")

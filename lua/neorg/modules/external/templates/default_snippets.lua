@@ -17,6 +17,8 @@ local rep = require("luasnip.extras").rep
 local m = require("luasnip.extras").m
 local lambda = require("luasnip.extras").l
 local postfix = require("luasnip.extras.postfix").postfix
+local neorg = require("neorg.core")
+local utils = neorg.utils
 
 local snippets, autosnippets = {}, {}
 local e = function(trig, name, dscr, wordTrig, regTrig, docstring, docTrig, hidden, priority)
@@ -90,7 +92,7 @@ M.default_keywords = {
     TOMORROW = f(M.current_date_f(1)),
     YESTERDAY = f(M.current_date_f(-1)),
     WEATHER = c(1, { t("Sunny "), t("Cloudy "), t("Rainy ") }),
-    AUTHOR = f(require("neorg.external.helpers").get_username),
+    AUTHOR = f(utils.get_username),
     URL_TAG = fmt([[#{url_type} {{{url}}}]], {
         url = i(1, "url"),
         url_type = f(function(args, _)
