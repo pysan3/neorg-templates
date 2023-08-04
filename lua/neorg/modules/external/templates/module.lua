@@ -1,8 +1,5 @@
-require("neorg.modules.base")
-require("neorg.modules")
-require("neorg.external.helpers")
-
 local ext_name = "templates"
+local neorg = require("neorg.core")
 
 ---Concat table of strings
 ---@param s_tbl string | string[] # table of strings, if it is a simple string, treats as `{ s_tbl }`
@@ -144,7 +141,8 @@ end
 module.load = function()
     -- Find templates
     if type(module.config.public.templates_dir) ~= "table" then
-        module.config.public.templates_dir = { module.config.public.templates_dir }
+        ---@type string[]
+        module.config.public.templates_dir = { module.config.public.templates_dir } ---@diagnostic disable-line
     end
     for _, dir in ipairs(module.config.public.templates_dir) do
         local dir_abs = vim.fn.fnamemodify(dir, ":p")
