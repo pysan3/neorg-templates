@@ -47,19 +47,40 @@ local M = {
     },
 }
 
-M.parse_date = function(delta_date, str)
-    local year, month, day = string.match(str, [[^(%d%d%d%d)-(%d%d)-(%d%d)$]])
+M.parse_date = function(delta_date, str_or_date)
+    if type(str_or_date) ~= "string" then
+        str_or_date = os.date(M.date_format, str_or_date)
+    end
+    local year, month, day = string.match(str_or_date, [[^(%d%d%d%d)-(%d%d)-(%d%d)$]])
     return os.date(M.date_format, os.time({ year = year, month = month, day = day }) + 86400 * delta_date)
 end
 
-M.current_date_f = function(delta_day)
-    return function()
-        return os.date(M.date_format, os.time() + 86400 * delta_day)
-    end
+M.current_date = function(delta_day)
+    return os.date(M.date_format, os.time() + 86400 * delta_day)
 end
 
 M.file_title = function()
     return vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ":t:r")
+end
+
+M.ostime = function(year, month, day)
+    if year == nil or month == nil or day == nil then
+        return os.time()
+    end
+    return os.time({ year = year, month = month, day = day })
+end
+
+M.file_tree_date = function()
+    local f_name = vim.api.nvim_buf_get_name(0)
+    local grandparent = vim.fn.fnamemodify(f_name, ":p:h:h:h") or ""
+    local date_path = vim.fn.fnamemodify(f_name:sub(grandparent:len() + 2):gsub([[\]], "/"), ":r") or ""
+    local year, month, day = string.match(date_path, [[^(%d%d%d%d)/(%d%d)/(%d%d)$]])
+    return M.ostime(year, month, day)
+end
+
+M.file_name_date = function()
+    local year, month, day = string.match(M.file_title() or "", [[^(%d%d%d%d)-(%d%d)-(%d%d)$]])
+    return M.ostime(year, month, day)
 end
 
 ---Parse url and return service name based on domain
@@ -88,9 +109,6 @@ M.default_keywords = {
     INSERT = function()
         return i(1)
     end,
-    TODAY = f(M.current_date_f(0)),
-    TOMORROW = f(M.current_date_f(1)),
-    YESTERDAY = f(M.current_date_f(-1)),
     WEATHER = c(1, { t("Sunny "), t("Cloudy "), t("Rainy ") }),
     AUTHOR = f(utils.get_username),
     URL_TAG = fmt([[#{url_type} {{{url}}}]], {
@@ -99,6 +117,35 @@ M.default_keywords = {
             return M.link_type(args[1][1]):lower()
         end, { 1 }),
     }),
+    YESTERDAY = function()
+        return t(M.current_date(-1))
+    end,
+    TODAY = function()
+        return t(M.current_date(0))
+    end,
+    TOMORROW = function()
+        return t(M.current_date(1))
+    end,
+    -- When journal.strategy == "flat"
+    YESTERDAY_OF_FILENAME = function()
+        return t(M.parse_date(-1, M.file_name_date()))
+    end,
+    TODAY_OF_FILENAME = function()
+        return t(M.parse_date(0, M.file_name_date()))
+    end,
+    TOMORROW_OF_FILENAME = function()
+        return t(M.parse_date(1, M.file_name_date()))
+    end,
+    -- When journal.strategy == "nested"
+    YESTERDAY_OF_FILETREE = function()
+        return t(M.parse_date(-1, M.file_tree_date()))
+    end,
+    TODAY_OF_FILETREE = function()
+        return t(M.parse_date(0, M.file_tree_date()))
+    end,
+    TOMORROW_OF_FILETREE = function()
+        return t(M.parse_date(1, M.file_tree_date()))
+    end,
 }
 
 return M
