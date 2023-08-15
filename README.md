@@ -227,6 +227,34 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 ```
 
 
+### Builtin Snippets
+
+I will not list all builtin snippets but some useful ones that however might need a bit of explanation.
+Please see [`default_snippets.lua`](./lua/neorg/modules/external/templates/default_snippets.lua) for the whole list.
+
+
+#### `TITLE`, `TITLE_INPUT`
+
+Inserts the file name. `TITLE_INPUT` would be an insert node with default text being `TITLE`.
+
+
+#### `URL_TAG`
+
+When you insert a URL, based on the domain, this snippet adds a `#tag` in front of the URL.
+
+`https://youtu.be/NnmRVY22Lq8` -> `#YouTube {https://youtu.be/NnmRVY22Lq8}`
+
+
+#### `TODAY`, `YESTERDAY`, `TOMORROW` + `_OF_FILENAME`, `_OF_FILETREE`
+
+`TODAY_OF_FILENAME` will insert the date by parsing the filename.
+`OF_FILENAME` is useful when `journal.strategy == "flat"`.
+So, if the filename is `2023-01-01.norg`, `YESTERDAY_OF_FILENAME => 2022-12-31`.
+
+Similarly, `TODAY_OF_FILETREE` is useful when `journal.strategy == "nested"`.
+Ex: if the filename is `.../2023/01/01.norg`, `YESTERDAY_OF_FILETREE => 2022-12-31`.
+
+
 ## Useful Templates
 
 - [pysan3](https://github.com/pysan3)
