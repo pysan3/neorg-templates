@@ -13,7 +13,7 @@ end
 ---@param path string # path
 ---@return string # name of file, i.e. file stem
 M.fs_name = function(path)
-    return vim.fn.fnamemodify(path, ":p:t:r")
+    return vim.fn.fnamemodify(path, ":p:t:r") or path
 end
 
 ---Checks whether path's extension is `norg`
