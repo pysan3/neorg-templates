@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.0.0](https://github.com/pysan3/neorg-templates/compare/v1.0.1...v2.0.0) (2023-08-16)
+
+
+### Features
+
+* **snippets:** add `TODAY_OF_FILETREE` to parse *nested* journal files ([#13](https://github.com/pysan3/neorg-templates/issues/13)) ([09609b5](https://github.com/pysan3/neorg-templates/commit/09609b552ac566f425120efd084f83cc0f813d59))
+
+
+### Bug Fixes
+
+* references to neorg modules ([#12](https://github.com/pysan3/neorg-templates/issues/12)) ([e8a8541](https://github.com/pysan3/neorg-templates/commit/e8a8541b3288102b81e25408ce92d39751362e7c))
+* **typing:** fix typing issue. refactoring ([#14](https://github.com/pysan3/neorg-templates/issues/14)) ([1078ced](https://github.com/pysan3/neorg-templates/commit/1078ced1f995cc053cdb10b51bd5e5dd5d76f78a))
+* **upstream:** neorg as local variable (v6.0.0+) ([#10](https://github.com/pysan3/neorg-templates/issues/10)) ([fc7f093](https://github.com/pysan3/neorg-templates/commit/fc7f093532903b792bcccdf292857a6de96c1c8a))
+
+
+### Miscellaneous Chores
+
+* release 2.0.0 ([1db8cc0](https://github.com/pysan3/neorg-templates/commit/1db8cc0147de7c8b9e088897c21b54785991729d))
+
 ## [1.0.1](https://github.com/pysan3/neorg-templates/compare/v1.0.0...v1.0.1) (2023-06-28)
 
 
