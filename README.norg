@@ -5,13 +5,10 @@ authors: takuto
 categories:
 created: 2023-04-16
 updated: 2023-05-17
-version: 1.0.0
+version: 1.1.1
 @end
 
 * Neorg Templates
-  #norg
-  #neorg
-  #templates
   \* *This README is generated from {./README.norg}.*
 
 ** Demo
@@ -35,8 +32,7 @@ version: 1.0.0
     So, the plugin works like this. First you create a template file with placeholders for dynamic values.
 
     `~/.config/nvim/templates/norg/journal.norg`
-    ,`@end` is escaped below because it ends the code block...,
-    @code norg
+    |example
     @document.meta
     title: {TITLE_INPUT}
     description:
@@ -45,7 +41,7 @@ version: 1.0.0
     created: {TODAY}
     updated: {TODAY}
     version: 1.0.0
-    \@end
+    @end
 
     * {TITLE_INPUT}
       Weather: {WEATHER}
@@ -53,7 +49,7 @@ version: 1.0.0
 
     ** Daily Review
        - {CURSOR}
-    @end
+    |end
 
     When you load this plugin, you have the command: `:Neorg templates load journal`.
 
@@ -99,23 +95,26 @@ version: 1.0.0
 *** Options
     Find details here: {/ ./lua/neorg/modules/external/templates/module.lua:59}[`module.config.public`]
 
-**** `templates_dir`: `string | string[]`
+**** `templates_dir`
+     - `string | string[]`
      Path to the directories where the template files are stored.
 
      - Default: `vim.fn.stdpath("config") .. "/templates/norg"`
      -- Most likely: `~/.config/nvim/templates/norg`
      - Only looks for 1 depth.
      - You may also provide multiple paths to directories with a table.
-     -- `templates_dir = {"~/temp1/", "~/temp2/"}`
+     -- `templates_dir = {"~/temp_dir1/", "~/temp_dir2/"}`
 
-**** `default_subcommand`: `string`
+**** `default_subcommand`
+     - `string`
      Default action to take when only filename is provided.
 
      More details are explained in {** Subcommands}
 
-     - Default: `add`: {** Subcommands} - {*** `add`}
+     - Default: `add` {** Subcommands} - {*** `add`}
 
-**** `keywords`: `{KEY: <snippet_node>}` | `{KEY: fun(...) -> <snippet_node>}`
+**** `keywords`
+     - `{KEY: <snippet_node>}` | `{KEY: fun(...) -> <snippet_node>}`
      Define snippets to be called in placeholders.
 
      Kyes are advised to be `ALL_CAPITALIZED`.
@@ -128,10 +127,19 @@ version: 1.0.0
      -- e.g. `i(<pos>, "default text")`, `c(<pos>, { t("choice1"), t("choice2") })`
      -- The order of jumping is dynamically calculated after loading the template, so you cannot specify with integer here.
 
-**** `snippets_overwrite`: `table<any, any>`
+**** `snippets_overwrite`
+     - `table<string, any>`
      Overwrite any field of {/ ./lua/neorg/modules/external/templates/default_snippets.lua}.
 
      - You might want to change `date_format`.
+     -- For more tags, see: {https://www.lua.org/pil/22.1.html}
+     @code lua
+     {
+       snippets_overwrite = {
+         date_format = [[%a, %d %b]] -- Wed, 1 Nov (norg date format)
+       }
+     }
+     @end
 
 ** Subcommands
    All command in this plugin takes the format of `:Neorg templates <subcmd> <fs_name>`.
@@ -140,7 +148,8 @@ version: 1.0.0
    - `<fs_name>`: Name of template file to load.
    -- If you want to load `<config.templates_dir>/journal.norg`, call with `journal`.
 
-**** `default_subcommand`: {**** `default_subcommand`: `string`}
+**** `default_subcommand` Option
+     Read {**** `default_subcommand`} for more information.
      If you ommit `<subcmd>` and call this plugin with `:Neorg templates <fs_name>`,
      the behavior depends on this config option.
 
@@ -212,7 +221,7 @@ version: 1.0.0
      So, if the filename is `2023-01-01.norg`, `YESTERDAY_OF_FILENAME => 2022-12-31`.
 
      Similarly, `TODAY_OF_FILETREE` is useful when `journal.strategy == "nested"`.
-     Ex: if the filename is `.../2023/01/01.norg`, `YESTERDAY_OF_FILETREE => 2022-12-31`.
+     Ex: if the filename is `/path/to/2023/01/01.norg`, `YESTERDAY_OF_FILETREE => 2022-12-31`.
 
 ** Useful Templates
    - {https://github.com/pysan3}[pysan3]
