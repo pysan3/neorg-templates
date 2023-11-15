@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.1](https://github.com/pysan3/neorg-templates/compare/v2.0.0...v2.0.1) (2023-11-15)
+
+
+### Bug Fixes
+
+* **snippets:** specify date format with arg and add type annots ([#16](https://github.com/pysan3/neorg-templates/issues/16)) ([dce7288](https://github.com/pysan3/neorg-templates/commit/dce72881ecbb57ff0f067177fea5c23764b19f17))
+* **snippets:** specify date format with arg and add type annots ([#18](https://github.com/pysan3/neorg-templates/issues/18)) ([5cce9f5](https://github.com/pysan3/neorg-templates/commit/5cce9f51d6ded082a5ca8b145ff6d736cd2f7f1e))
+
 ## [2.0.0](https://github.com/pysan3/neorg-templates/compare/v1.0.1...v2.0.0) (2023-08-16)
 
 
