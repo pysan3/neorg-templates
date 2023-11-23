@@ -183,10 +183,17 @@ module.load = function()
     end
 
     -- Add user defined snippets and append keywords
-    default_snippets = vim.tbl_deep_extend("force", default_snippets, module.config.public.snippets_overwrite)
-    snippet_handler.add_keywords(default_snippets.default_keywords)
+    for key, value in pairs(module.config.public.snippets_overwrite) do
+        local default_value = default_snippets[key]
+        if type(value) == "table" and type(default_value) == "table" then
+            default_snippets[key] = vim.tbl_deep_extend("force", default_value, value)
+        else
+            default_snippets[key] = value
+        end
+    end
+    snippet_handler.add_keywords(default_snippets.default_keywords or {})
     snippet_handler.add_keywords(module.config.public.keywords or {})
-    snippet_handler.magic_keywords = default_snippets.magic_keywords
+    snippet_handler.magic_keywords = default_snippets.magic_keywords or {}
 end
 
 module.on_event = function(event)
