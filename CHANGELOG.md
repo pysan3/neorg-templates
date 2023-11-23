@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.2](https://github.com/pysan3/neorg-templates/compare/v2.0.1...v2.0.2) (2023-11-23)
+
+
+### Bug Fixes
+
+* **module:** `snippets_overwrite` does nothing ([ef9fc2c](https://github.com/pysan3/neorg-templates/commit/ef9fc2ce6614565a5bdc166bc07e206702682381)), closes [#19](https://github.com/pysan3/neorg-templates/issues/19)
+
 ## [2.0.1](https://github.com/pysan3/neorg-templates/compare/v2.0.0...v2.0.1) (2023-11-15)
 
 
