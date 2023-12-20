@@ -60,8 +60,8 @@ version: 1.0.0
 When you load this plugin, you have the command:
 `:Neorg templates load journal`.
 
-This overwrites current file and substitutes current buffer with the
-content from template file. This behavior can be customized. More in
+This overwrites the current buffer and substitutes it with the content
+the template file. This behavior can be customized. More in
 [Subcommands](#subcommands).
 
 ### Autofill with `LuaSnip`
@@ -71,10 +71,9 @@ But do you see the `{AUTHOR}` placeholder in the template file?
 Yes, it automatically substitutes those placeholders **with the power of
 `LuaSnip`**!
 
-And because it is a snippet, you can also use `input_node`,
-`choice_node` and all other useful nodes inside your template file!
-Also, I've added some useful snippets by default so you can use them out
-of the box!
+And since it is a snippet, you can also use `input_node`, `choice_node`
+and all other useful nodes inside your template file! I've also added
+some useful snippets by default so you can use them out of the box.
 
 ## Installation
 
@@ -99,7 +98,14 @@ M.config = function ()
   require("neorg").setup({
     load = {
       ["external.templates"] = {
-        ...
+        -- templates_dir = vim.fn.stdpath("config") .. "/templates/norg",
+        -- default_subcommand = "add", -- or "fload", "load"
+        -- keywords = { -- Add your own keywords.
+        --   EXAMPLE_KEYWORD = function ()
+        --     return require("luasnip").insert_node(1, "default text blah blah")
+        --   end,
+        -- },
+        -- snippets_overwrite = {},
       }
     }
   })
@@ -113,10 +119,9 @@ Find details here:
 
 #### `templates_dir`
 
-- `string | string[]` Path to the directories where the template files
-  are stored.
+- `string | string[]`
 
-<!-- -->
+Path to the directories where the template files are stored.
 
 - Default: `vim.fn.stdpath("config") .. "/templates/norg"`
 
@@ -126,11 +131,13 @@ Find details here:
 
 - You may also provide multiple paths to directories with a table.
 
-  - `templates_dir = {"~/temp_dir1/", "~/temp_dir2/"}`
+  - `templates_dir = { "~/temp_dir1/", "~/temp_dir2/" }`
 
 #### `default_subcommand`
 
-- `string` Default action to take when only filename is provided.
+- `string`
+
+Default action to take when only filename is provided.
 
 More details are explained in [Subcommands](#subcommands)
 
@@ -138,13 +145,15 @@ More details are explained in [Subcommands](#subcommands)
 
 #### `keywords`
 
-- `{KEY: <snippet_node>}` \| `{KEY: fun(...) -> <snippet_node>}` Define
-  snippets to be called in placeholders.
+- `{KEY: <snippet_node>}` \| `{KEY: fun(...) -> <snippet_node>}`
 
-Kyes are advised to be `ALL_CAPITALIZED`.
+Define snippets to be called in placeholders. Kyes are advised to be
+`ALL_CAPITALIZED`.
 
 - Examples are provided in
   [./lua/neorg/modules/external/templates/default_snippets.lua](./lua/neorg/modules/external/templates/default_snippets.lua)
+
+  - Read [Builtin Snippets](#builtin-snippets) for more information.
 
 - `KEY` should be the name of the placeholder
 
@@ -164,10 +173,10 @@ Kyes are advised to be `ALL_CAPITALIZED`.
 
 #### `snippets_overwrite`
 
-- `table<string, any>` Overwrite any field of
-  [./lua/neorg/modules/external/templates/default_snippets.lua](./lua/neorg/modules/external/templates/default_snippets.lua).
+- `table<string, any>`
 
-<!-- -->
+Overwrite any field of
+[./lua/neorg/modules/external/templates/default_snippets.lua](./lua/neorg/modules/external/templates/default_snippets.lua).
 
 - You might want to change `date_format`.
 
@@ -184,12 +193,12 @@ Kyes are advised to be `ALL_CAPITALIZED`.
 ## Subcommands
 
 All command in this plugin takes the format of
-`:Neorg templates <subcmd> <fs_name>`.
+`:Neorg templates <subcmd> <templ_name>`.
 
 - `<subcmd>`: Sub command. Basically defines how to load the template
   file.
 
-- `<fs_name>`: Name of template file to load.
+- `<templ_name>`: Name of template file to load.
 
   - If you want to load `<config.templates_dir>/journal.norg`, call with
     `journal`.
@@ -198,32 +207,28 @@ All command in this plugin takes the format of
 
 Read [`default_subcommand`](#defaultsubcommand) for more information. If
 you ommit `<subcmd>` and call this plugin with
-`:Neorg templates <fs_name>`, the behavior depends on this config
+`:Neorg templates <templ_name>`, the behavior depends on this config
 option.
 
 You can choose from the functions below.
 
-Read
-[./lua/neorg/modules/external/templates/module.lua:78](./lua/neorg/modules/external/templates/module.lua:78)
-for more details.
-
 ### `add`
 
-Adds (append) template file content to the current cursor position
+Add (append) template file content to the current cursor position.
 
 ### `fload`
 
-Force-load fs\_name. Overwrites content of current file and replace it
-with LuaSnip.
+Force-load template file. Overwrites content of current file and replace
+it with LuaSnip.
 
 ### `load`
 
-Load. Similar to `fload` but asks for confirmation before deleting
+Load. Similar to `fload` but asks for confirmation before deleting the
 buffer content.
 
 ## Magic Keywords
 
-Magic keywords take the format of `{CURSOR}` same as a placeholder, but
+Magic keywords take the format of `{CURSOR}`, same as a placeholder, but
 has a special meaning.
 
 ### `{CURSOR}`
@@ -274,8 +279,8 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 
 ### Builtin Snippets
 
-I will not list all builtin snippets but some useful ones that however
-might need a bit of explanation. Please see
+I will not list all builtin snippets but some useful ones that might
+need a bit of explanation. Please read
 [`default_snippets.lua`](./lua/neorg/modules/external/templates/default_snippets.lua)
 for the whole list.
 
@@ -283,14 +288,6 @@ for the whole list.
 
 Inserts the file name. `TITLE_INPUT` would be an insert node with
 default text being `TITLE`.
-
-#### `URL_TAG`
-
-When you insert a URL, based on the domain, this snippet adds a `#tag`
-in front of the URL.
-
-`https://youtu.be/NnmRVY22Lq8` -\>
-`#YouTube {https://youtu.be/NnmRVY22Lq8}`
 
 #### `TODAY`, `YESTERDAY`, `TOMORROW` + `_OF_FILENAME`, `_OF_FILETREE`
 
@@ -301,6 +298,9 @@ filename is `2023-01-01.norg`, `YESTERDAY_OF_FILENAME => 2022-12-31`.
 Similarly, `TODAY_OF_FILETREE` is useful when
 `journal.strategy == "nested"`. Ex: if the filename is
 `/path/to/2023/01/01.norg`, `YESTERDAY_OF_FILETREE => 2022-12-31`.
+
+For more fine control, read [2. Build you own snippet
+key.](https://github.com/pysan3/neorg-templates/discussions/15#discussioncomment-7574518)
 
 ## Useful Templates
 
@@ -318,8 +318,6 @@ More examples welcome! Create a PR to update the README.
 
 ## Contribution
 
-- Any PR is WELCOME!!
-
 - Please follow code style defined in [./stylua.toml](./stylua.toml)
   using [StyLua](https://github.com/johnnymorganz/stylua).
 
@@ -327,3 +325,47 @@ More examples welcome! Create a PR to update the README.
 
 All files in this repository without annotation are licensed under the
 **GPL-3.0 license** as detailed in [LICENSE](LICENSE).
+
+## FAQs
+
+### Do you plan to support other snippet engines like Ultisnip?
+
+No. This plugin heavily depends on luasnip and I do not have the time
+and interest to support other ones.
+
+There is an [open issue](https://github.com/nvim-neorg/neorg/issues/714)
+discussing for a pure lua solution using autocmds.
+
+There are other neovim template plugins (not just for norg) that do not
+depend on luasnip. Here are some examples.
+
+- [template.nvim](https://github.com/nvimdev/template.nvim)
+
+- [skeleton.nvim](https://github.com/xvzc/skeleton.nvim)
+
+- [esqueleto.nvim](https://github.com/cvigilv/esqueleto.nvim)
+
+- [new-file-template.nvim](https://github.com/otavioschwanck/new-file-template.nvim)
+
+- [templar.nvim](https://github.com/vigoux/templar.nvim)
+
+### I want to use this plugin for other filetypes!
+
+Most of the code related to luasnip and template loading mechanism is
+written inside
+[`snippet_handler.lua`](https://github.com/pysan3/neorg-templates/blob/main/lua/neorg/modules/external/templates/snippet_handler.lua)
+which **does not** rely on neorg at all.
+
+You are free to fork / copy-paste this code as long as you respect the
+[LICENSE](#license). I just don't have the motivation to compete against
+other template plugins listed above.
+
+### Where can I contact you?
+
+I'll be at [neorg's discord server](https://discord.gg/T6EgTAX7ht) with
+the username `@pysan3`, so feel free to ping me there.
+
+### Where can I donate?
+
+Thank you very much but I'd be more than happy with a star for this
+repo. Buy yourself a cup of coffee and have a nice day 😉
