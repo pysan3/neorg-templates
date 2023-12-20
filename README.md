@@ -328,7 +328,7 @@ All files in this repository without annotation are licensed under the
 
 ## FAQs
 
-### Do you plan to support other snippet engines like Ultisnip?
+### Q. Do you plan to support other snippet engines like Ultisnip?
 
 No. This plugin heavily depends on luasnip and I do not have the time
 and interest to support other ones.
@@ -349,7 +349,7 @@ depend on luasnip. Here are some examples.
 
 - [templar.nvim](https://github.com/vigoux/templar.nvim)
 
-### I want to use this plugin for other filetypes!
+### Q. I want to use this plugin for other filetypes!
 
 Most of the code related to luasnip and template loading mechanism is
 written inside
@@ -360,12 +360,12 @@ You are free to fork / copy-paste this code as long as you respect the
 [LICENSE](#license). I just don't have the motivation to compete against
 other template plugins listed above.
 
-### Where can I contact you?
+### Q. Where can I contact you?
 
 I'll be at [neorg's discord server](https://discord.gg/T6EgTAX7ht) with
 the username `@pysan3`, so feel free to ping me there.
 
-### Where can I donate?
+### Q. Where can I donate?
 
 Thank you very much but I'd be more than happy with a star for this
 repo. Buy yourself a cup of coffee and have a nice day 😉
