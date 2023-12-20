@@ -36,6 +36,7 @@ end
 
 local M = {
     date_format = [[%Y-%m-%d]],
+    date_format_tree = [[%Y/%m/%d]],
     time_format = [[%H:%M]],
     url_lookup = {
         ["www.youtube.com"] = "YouTube",
@@ -176,13 +177,13 @@ M.default_keywords = {
     end,
     -- When journal.strategy == "nested"
     YESTERDAY_OF_FILETREE = function()
-        return t(M.parse_date(-1, M.file_tree_date()))
+        return t(M.parse_date(-1, M.file_tree_date(), M.date_format_tree))
     end,
     TODAY_OF_FILETREE = function()
-        return t(M.parse_date(0, M.file_tree_date()))
+        return t(M.parse_date(0, M.file_tree_date(), M.date_format_tree))
     end,
     TOMORROW_OF_FILETREE = function()
-        return t(M.parse_date(1, M.file_tree_date()))
+        return t(M.parse_date(1, M.file_tree_date(), M.date_format_tree))
     end,
 }
 
