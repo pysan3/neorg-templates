@@ -354,7 +354,11 @@ depend on luasnip. Here are some examples.
 Most of the code related to luasnip and template loading mechanism is
 written inside
 [`snippet_handler.lua`](https://github.com/pysan3/neorg-templates/blob/main/lua/neorg/modules/external/templates/snippet_handler.lua)
-which **does not** rely on neorg at all.
+which **does not** rely on neorg at all. The entry point is mostly
+`load_template_at_curpos(content, fs_name)`.
+
+For usage example, read the implementation of subcommands
+[here](https://github.com/pysan3/neorg-templates/blob/main/lua/neorg/modules/external/templates/module.lua#L78-L116).
 
 You are free to fork / copy-paste this code as long as you respect the
 [LICENSE](#license). I just don't have the motivation to compete against

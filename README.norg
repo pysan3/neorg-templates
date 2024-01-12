@@ -4,7 +4,7 @@ description: A template file mechanism for norg files.
 authors: takuto
 categories:
 created: 2023-04-16
-updated: 2023-05-17
+updated: 2024-01-12T18:26:18+0900
 version: 1.1.1
 @end
 
@@ -263,6 +263,10 @@ version: 1.1.1
     Most of the code related to luasnip and template loading mechanism is written inside
     {https://github.com/pysan3/neorg-templates/blob/main/lua/neorg/modules/external/templates/snippet_handler.lua}[`snippet_handler.lua`]
     which *does not* rely on neorg at all.
+    The entry point is mostly `load_template_at_curpos(content, fs_name)`.
+
+    For usage example, read the implementation of subcommands
+    {https://github.com/pysan3/neorg-templates/blob/main/lua/neorg/modules/external/templates/module.lua#L78-L116}[here].
 
     You are free to fork / copy-paste this code as long as you respect the {** LICENSE}.
     I just don't have the motivation to compete against other template plugins listed above.
