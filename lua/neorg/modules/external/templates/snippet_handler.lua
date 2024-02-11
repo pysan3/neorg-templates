@@ -10,7 +10,7 @@ local rep = require("luasnip.extras").rep
 -- stylua: ignore end
 ---@diagnostic enable
 
-M = {
+local M = {
     keywords = {}, -- will be updated with M.add_keywords
     magic_keywords = {},
 }
