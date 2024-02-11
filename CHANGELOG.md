@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.3](https://github.com/pysan3/neorg-templates/compare/v2.0.2...v2.0.3) (2024-02-11)
+
+
+### Bug Fixes
+
+* local M ([#22](https://github.com/pysan3/neorg-templates/issues/22)) ([1ce8bf6](https://github.com/pysan3/neorg-templates/commit/1ce8bf6769881b0500b1cca5b5d1285471b84929))
+
 ## [2.0.2](https://github.com/pysan3/neorg-templates/compare/v2.0.1...v2.0.2) (2023-11-23)
 
 
